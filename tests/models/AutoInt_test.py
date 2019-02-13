@@ -1,6 +1,10 @@
 import pytest
+import sys
+
 from deepctr.models import AutoInt
-from ..utils import check_model, get_test_data
+sys.path.insert(0, '..')
+
+from utils import check_model, get_test_data
 
 
 @pytest.mark.parametrize(
