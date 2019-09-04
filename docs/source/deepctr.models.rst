@@ -13,7 +13,9 @@ Submodules
    deepctr.models.deepfm
    deepctr.models.dien
    deepctr.models.din
+   deepctr.models.dsin
    deepctr.models.fgcnn
+   deepctr.models.fibinet
    deepctr.models.fnn
    deepctr.models.mlr
    deepctr.models.nffm

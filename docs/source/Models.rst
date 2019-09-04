@@ -14,7 +14,10 @@ DeepCTR Models API
    DCN<deepctr.models.dcn>
    DIN<deepctr.models.din>
    DIEN<deepctr.models.dien>
+   DSIN<deepctr.models.dsin>
    xDeepFM<deepctr.models.xdeepfm>
    AutoInt<deepctr.models.autoint>
    NFFM<deepctr.models.nffm>
    FGCNN<deepctr.models.fgcnn>
+   FiBiNET<deepctr.models.fibinet>
+   

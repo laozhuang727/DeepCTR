@@ -13,6 +13,8 @@ from .pnn import PNN
 from .wdl import WDL
 from .xdeepfm import xDeepFM
 from .fgcnn import FGCNN
+from .dsin import DSIN
+from .fibinet import FiBiNET
 
 __all__ = ["AFM", "CCPM","DCN", "MLR",  "DeepFM",
-           "MLR", "NFM", "DIN", "DIEN", "FNN", "PNN", "WDL", "xDeepFM", "AutoInt", "NFFM","FGCNN"]
+           "MLR", "NFM", "DIN", "DIEN", "FNN", "PNN", "WDL", "xDeepFM", "AutoInt", "NFFM", "FGCNN", "DSIN","FiBiNET"]

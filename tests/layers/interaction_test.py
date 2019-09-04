@@ -1,5 +1,5 @@
 import pytest
-from tensorflow.python.keras.layers import PReLU
+#from tensorflow.python.keras.layers import PReLU
 from tensorflow.python.keras.utils import CustomObjectScope
 
 from deepctr import layers
@@ -14,27 +14,22 @@ SEQ_LENGTH = 10
 
 @pytest.mark.parametrize(
 
-    'layer_num,l2_reg',
+    'layer_num',
 
-    [(layer_num, l2_reg)
-
-     for layer_num in [0, 1, 2, ]
-
-     for l2_reg in [0, 1, ]
-     ]
+    [0,1]
 
 )
-def test_CrossNet(layer_num, l2_reg,):
+def test_CrossNet(layer_num,):
     with CustomObjectScope({'CrossNet': layers.CrossNet}):
         layer_test(layers.CrossNet, kwargs={
-                   'layer_num': layer_num, 'l2_reg': l2_reg}, input_shape=(2, 3))
+                   'layer_num': layer_num, }, input_shape=(2, 3))
 
 
-def test_CrossNet_invalid():
-    with pytest.raises(ValueError):
-        with CustomObjectScope({'CrossNet': layers.CrossNet}):
-            layer_test(layers.CrossNet, kwargs={
-                'layer_num': 1, 'l2_reg': 0}, input_shape=(2, 3, 4))
+# def test_CrossNet_invalid():
+#     with pytest.raises(ValueError):
+#         with CustomObjectScope({'CrossNet': layers.CrossNet}):
+#             layer_test(layers.CrossNet, kwargs={
+#                 'layer_num': 1, 'l2_reg': 0}, input_shape=(2, 3, 4))
 
 
 @pytest.mark.parametrize(
@@ -80,38 +75,31 @@ def test_AFMLayer():
 
 
 @pytest.mark.parametrize(
-    'layer_size,activation,split_half',
-    [(layer_size, activation, split_half)
-     for activation in ['linear', PReLU]
-     for split_half in [True, False]
-     for layer_size in [(10,), (10, 8)]
+    'layer_size,split_half',
+    [((10,),False),((10,8),True)
      ]
 )
-def test_CIN(layer_size, activation, split_half):
+def test_CIN(layer_size, split_half):
     with CustomObjectScope({'CIN': layers.CIN}):
-        layer_test(layers.CIN, kwargs={"layer_size": layer_size, "activation":
-                                       activation, "split_half": split_half}, input_shape=(
+        layer_test(layers.CIN, kwargs={"layer_size": layer_size, "split_half": split_half}, input_shape=(
             BATCH_SIZE, FIELD_SIZE, EMBEDDING_SIZE))
 
 
-@pytest.mark.parametrize(
-    'layer_size',
-    [(), (3, 10)
-     ]
-)
-def test_test_CIN_invalid(layer_size):
-    with pytest.raises(ValueError):
-        with CustomObjectScope({'CIN': layers.CIN}):
-            layer_test(layers.CIN, kwargs={"layer_size": layer_size}, input_shape=(
-                BATCH_SIZE, FIELD_SIZE, EMBEDDING_SIZE))
+# @pytest.mark.parametrize(
+#     'layer_size',
+#     [(), (3, 10)
+#      ]
+# )
+# def test_test_CIN_invalid(layer_size):
+#     with pytest.raises(ValueError):
+#         with CustomObjectScope({'CIN': layers.CIN}):
+#             layer_test(layers.CIN, kwargs={"layer_size": layer_size}, input_shape=(
+#                 BATCH_SIZE, FIELD_SIZE, EMBEDDING_SIZE))
 
 
 @pytest.mark.parametrize(
     'head_num,use_res',
-    [(head_num, use_res,)
-     for head_num in [1, 2]
-     for use_res in [True, False]
-     ]
+    [(1,True),(2,False,)]
 )
 def test_InteractingLayer(head_num, use_res,):
     with CustomObjectScope({'InteractingLayer': layers.InteractingLayer}):
@@ -124,5 +112,21 @@ def test_FGCNNLayer():
         layer_test(layers.FGCNNLayer, kwargs={'filters':(4, 6,),'kernel_width':(7, 7,)}, input_shape=(
             BATCH_SIZE, FIELD_SIZE, EMBEDDING_SIZE))
 
+
+# def test_SENETLayer():
+#     with CustomObjectScope({'SENETLayer': layers.SENETLayer}):
+#         layer_test(layers.SENETLayer, kwargs={'reduction_ratio':2}, input_shape=[(
+#             BATCH_SIZE, 1, EMBEDDING_SIZE)]*FIELD_SIZE)
+
+
+@pytest.mark.parametrize(
+    'bilinear_type',
+    ['all','each','interaction'
+     ]
+)
+def test_BilinearInteraction(bilinear_type):
+    with CustomObjectScope({'BilinearInteraction': layers.BilinearInteraction}):
+        layer_test(layers.BilinearInteraction, kwargs={'bilinear_type':bilinear_type}, input_shape=[(
+            BATCH_SIZE, 1, EMBEDDING_SIZE)]*FIELD_SIZE)
 
 

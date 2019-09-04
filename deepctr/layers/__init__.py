@@ -4,12 +4,12 @@ from .activation import Dice
 from .core import DNN, LocalActivationUnit, PredictionLayer
 from .interaction import (CIN, FM, AFMLayer, BiInteractionPooling, CrossNet,
                           InnerProductLayer, InteractingLayer,
-                          OutterProductLayer, FGCNNLayer)
+                          OutterProductLayer, FGCNNLayer,SENETLayer,BilinearInteraction)
 from .normalization import LayerNormalization
 from .sequence import (AttentionSequencePoolingLayer, BiasEncoding, BiLSTM,
-                       KMaxPooling, Position_Embedding, SequencePoolingLayer,
+                       KMaxPooling, SequencePoolingLayer,
                        Transformer, DynamicGRU)
-from .utils import NoMask, Hash
+from .utils import NoMask, Hash,Linear
 
 custom_objects = {'tf': tf,
                   'InnerProductLayer': InnerProductLayer,
@@ -34,4 +34,8 @@ custom_objects = {'tf': tf,
                   'KMaxPooling': KMaxPooling,
                   'FGCNNLayer': FGCNNLayer,
                   'Hash': Hash,
-                  'DynamicGRU': DynamicGRU}
+                  'Linear':Linear,
+                  'DynamicGRU': DynamicGRU,
+                  'SENETLayer':SENETLayer,
+                  'BilinearInteraction':BilinearInteraction,
+                  }
