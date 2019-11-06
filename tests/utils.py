@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function
 
 import inspect
 import sys
+import os
 
 import numpy as np
 import  tensorflow as tf
@@ -13,7 +14,7 @@ from tensorflow.python.keras.models import Model, load_model, save_model
 from deepctr.inputs import SparseFeat, DenseFeat,VarLenSparseFeat
 from deepctr.layers import  custom_objects
 
-SAMPLE_SIZE=16
+SAMPLE_SIZE=8
 
 def gen_sequence(dim, max_len, sample_size):
     return np.array([np.random.randint(0, dim, max_len) for _ in range(sample_size)]), np.random.randint(1, max_len + 1, sample_size)
@@ -347,10 +348,12 @@ def check_model(model, model_name, x, y,check_model_io=True):
     print(model_name+" test train valid pass!")
     model.save_weights(model_name + '_weights.h5')
     model.load_weights(model_name + '_weights.h5')
+    os.remove(model_name + '_weights.h5')
     print(model_name+" test save load weight pass!")
     if check_model_io:
         save_model(model, model_name + '.h5')
         model = load_model(model_name + '.h5', custom_objects)
+        os.remove(model_name + '.h5')
         print(model_name + " test save load model pass!")
 
     print(model_name + " test pass!")

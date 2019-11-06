@@ -6,7 +6,7 @@
 Welcome to DeepCTR's documentation!
 ===================================
 
-|Downloads|_ |Stars|_ |Forks|_ |PyPi|_ |Issues|_ |Activity|_
+|Downloads|_ |Stars|_ |Forks|_ |PyPii|_ |Issues|_ |Chat|_
 
 .. |Downloads| image:: https://pepy.tech/badge/deepctr
 .. _Downloads: https://pepy.tech/project/deepctr
@@ -17,17 +17,16 @@ Welcome to DeepCTR's documentation!
 .. |Forks| image:: https://img.shields.io/github/forks/shenweichen/deepctr.svg
 .. _Forks: https://github.com/shenweichen/DeepCTR/fork
 
-.. |PyPi| image:: https://img.shields.io/pypi/v/deepctr.svg
-.. _PyPi: https://pypi.org/project/deepctr/
+.. |PyPii| image:: https://img.shields.io/pypi/v/deepctr.svg
+.. _PyPii: https://pypi.org/project/deepctr
 
 .. |Issues| image:: https://img.shields.io/github/issues/shenweichen/deepctr.svg
 .. _Issues: https://github.com/shenweichen/deepctr/issues
 
-.. |Activity| image:: https://img.shields.io/github/last-commit/shenweichen/deepctr.svg
-.. _Activity: https://github.com/shenweichen/DeepCTR
+.. |Chat| image:: https://img.shields.io/badge/chat-wechat-brightgreen?style=flat
+.. _Chat: ./#DisscussionGroup
 
-
-DeepCTR is a **Easy-to-use** , **Modular** and **Extendible** package of deep-learning based CTR models along with lots of core components layer  which can be used to build your own custom model easily.It is implemented by tensorflow.You can use any complex model with ``model.fit()`` and ``model.predict()``.
+DeepCTR is a **Easy-to-use** , **Modular** and **Extendible** package of deep-learning based CTR models along with lots of core components layer  which can be used to build your own custom model easily.It is compatible with **tensorflow 1.4+ and 2.0+**.You can use any complex model with ``model.fit()`` and ``model.predict()``.
 
 Let's `Get Started! <./Quick-Start.html>`_ (`Chinese Introduction <https://zhuanlan.zhihu.com/p/53231955>`_)
 
@@ -35,11 +34,18 @@ You can read the latest code at https://github.com/shenweichen/DeepCTR
 
 News
 -----
+10/03/2019 : Simplify the input logic(`examples <./Examples.html#classification-criteo>`_). `Changelog <https://github.com/shenweichen/DeepCTR/releases/tag/v0.6.2>`_
+
+09/22/2019 : `DeepCTR-Torch <https://github.com/shenweichen/DeepCTR-Torch>`_ first version v0.1.0  is released on `PyPi <https://pypi.org/project/deepctr-torch/>`_ !
+
 08/02/2019 : Now DeepCTR is compatible with tensorflow `1.14` and `2.0.0`. `Changelog <https://github.com/shenweichen/DeepCTR/releases/tag/v0.6.0>`_
 
-07/21/2019 : Refactor Linear Layer. `Changelog <https://github.com/shenweichen/DeepCTR/releases/tag/v0.5.2>`_
+DisscussionGroup
+-----------------------
 
-07/10/2019 : Add `FiBiNEt <./Features.html#fibinet-feature-importance-and-bilinear-feature-interaction-network>`_ . `Changelog <https://github.com/shenweichen/DeepCTR/releases/tag/v0.5.1>`_
+* 公众号：**浅梦的学习笔记**  wechat ID: **deepctrbot**
+
+.. image:: ../pics/weichennote.png
 
 .. toctree::
    :maxdepth: 2

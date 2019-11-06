@@ -1,10 +1,11 @@
 import pandas as pd
 from sklearn.metrics import log_loss, roc_auc_score
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import LabelEncoder, MinMaxScaler
+from tensorflow.python.keras.utils import multi_gpu_model
 
 from deepctr.models import DeepFM
-from deepctr.inputs import SparseFeat, DenseFeat,get_feature_names
+from deepctr.inputs import  SparseFeat, DenseFeat, get_feature_names
 
 if __name__ == "__main__":
     data = pd.read_csv('./criteo_sample.txt')
@@ -16,19 +17,23 @@ if __name__ == "__main__":
     data[dense_features] = data[dense_features].fillna(0, )
     target = ['label']
 
-    # 1.do simple Transformation for dense features
+    # 1.Label Encoding for sparse features,and do simple Transformation for dense features
+    for feat in sparse_features:
+        lbe = LabelEncoder()
+        data[feat] = lbe.fit_transform(data[feat])
     mms = MinMaxScaler(feature_range=(0, 1))
     data[dense_features] = mms.fit_transform(data[dense_features])
 
-    # 2.set hashing space for each sparse field,and record dense feature field name
+    # 2.count #unique features for each sparse field,and record dense feature field name
 
-    fixlen_feature_columns = [SparseFeat(feat, 1000, use_hash=True, dtype='string')  # since the input is string
-                              for feat in sparse_features] + [DenseFeat(feat, 1, )
+    fixlen_feature_columns = [SparseFeat(feat, data[feat].nunique())
+                           for feat in sparse_features] + [DenseFeat(feat, 1,)
                           for feat in dense_features]
 
-    linear_feature_columns = fixlen_feature_columns
     dnn_feature_columns = fixlen_feature_columns
-    feature_names = get_feature_names(linear_feature_columns + dnn_feature_columns, )
+    linear_feature_columns = fixlen_feature_columns
+
+    feature_names = get_feature_names(linear_feature_columns + dnn_feature_columns)
 
     # 3.generate input data for model
 
@@ -37,9 +42,10 @@ if __name__ == "__main__":
     train_model_input = {name:train[name] for name in feature_names}
     test_model_input = {name:test[name] for name in feature_names}
 
-
     # 4.Define Model,train,predict and evaluate
-    model = DeepFM(linear_feature_columns,dnn_feature_columns, task='binary')
+    model = DeepFM(linear_feature_columns, dnn_feature_columns, task='binary')
+    model = multi_gpu_model(model, gpus=2)
+
     model.compile("adam", "binary_crossentropy",
                   metrics=['binary_crossentropy'], )
 
