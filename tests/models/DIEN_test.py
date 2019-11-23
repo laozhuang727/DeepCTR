@@ -3,7 +3,7 @@ import pytest
 import tensorflow as tf
 from packaging import version
 from deepctr.models import DIEN
-from deepctr.inputs import SparseFeat,DenseFeat,VarLenSparseFeat,get_feature_names
+from deepctr.inputs import SparseFeat,DenseFeat,VarLenSparseFeat,get_input_feature_names
 from ..utils import check_model
 
 
@@ -42,7 +42,7 @@ def get_xy_fd(use_neg=False, hash_flag=False):
                         VarLenSparseFeat('neg_hist_item_gender',3+1, maxlen=4, embedding_name='item_gender')]
 
 
-    feature_names = get_feature_names(feature_columns)
+    feature_names = get_input_feature_names(feature_columns)
     x = {name:feature_dict[name] for name in feature_names}
     x["seq_length"] = behavior_length
     y = [1, 0, 1]

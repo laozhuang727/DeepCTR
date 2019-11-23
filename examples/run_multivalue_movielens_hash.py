@@ -3,7 +3,7 @@ import pandas as pd
 from tensorflow.python.keras.preprocessing.sequence import pad_sequences
 
 from deepctr.models import DeepFM
-from deepctr.inputs import SparseFeat, VarLenSparseFeat,get_feature_names
+from deepctr.inputs import SparseFeat, VarLenSparseFeat,get_input_feature_names
 
 if __name__ == "__main__":
     data = pd.read_csv("./movielens_sample.txt")
@@ -30,7 +30,7 @@ if __name__ == "__main__":
                                                dtype="string")]  # Notice : value 0 is for padding for sequence input feature
     linear_feature_columns = fixlen_feature_columns + varlen_feature_columns
     dnn_feature_columns = fixlen_feature_columns + varlen_feature_columns
-    feature_names = get_feature_names(linear_feature_columns + dnn_feature_columns)
+    feature_names = get_input_feature_names(linear_feature_columns + dnn_feature_columns)
 
     # 3.generate input data for model
     model_input = {name:data[name] for name in feature_names}

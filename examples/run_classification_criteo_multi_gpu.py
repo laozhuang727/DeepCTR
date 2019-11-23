@@ -5,7 +5,7 @@ from sklearn.preprocessing import LabelEncoder, MinMaxScaler
 from tensorflow.python.keras.utils import multi_gpu_model
 
 from deepctr.models import DeepFM
-from deepctr.inputs import  SparseFeat, DenseFeat, get_feature_names
+from deepctr.inputs import  SparseFeat, DenseFeat, get_input_feature_names
 
 if __name__ == "__main__":
     data = pd.read_csv('./criteo_sample.txt')
@@ -17,14 +17,14 @@ if __name__ == "__main__":
     data[dense_features] = data[dense_features].fillna(0, )
     target = ['label']
 
-    # 1.Label Encoding for sparse features,and do simple Transformation for dense features
+    # 1.Label Encoding for sparse input_layer_features,and do simple Transformation for dense input_layer_features
     for feat in sparse_features:
         lbe = LabelEncoder()
         data[feat] = lbe.fit_transform(data[feat])
     mms = MinMaxScaler(feature_range=(0, 1))
     data[dense_features] = mms.fit_transform(data[dense_features])
 
-    # 2.count #unique features for each sparse field,and record dense feature field name
+    # 2.count #unique input_layer_features for each sparse field,and record dense feature field name
 
     fixlen_feature_columns = [SparseFeat(feat, data[feat].nunique())
                            for feat in sparse_features] + [DenseFeat(feat, 1,)
@@ -33,7 +33,7 @@ if __name__ == "__main__":
     dnn_feature_columns = fixlen_feature_columns
     linear_feature_columns = fixlen_feature_columns
 
-    feature_names = get_feature_names(linear_feature_columns + dnn_feature_columns)
+    feature_names = get_input_feature_names(linear_feature_columns + dnn_feature_columns)
 
     # 3.generate input data for model
 

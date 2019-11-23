@@ -21,8 +21,8 @@ def FiBiNET(linear_feature_columns, dnn_feature_columns, embedding_size=8, bilin
             task='binary'):
     """Instantiates the Feature Importance and Bilinear feature Interaction NETwork architecture.
 
-    :param linear_feature_columns: An iterable containing all the features used by linear part of the model.
-    :param dnn_feature_columns: An iterable containing all the features used by deep part of the model.
+    :param linear_feature_columns: An iterable containing all the input_layer_features used by linear part of the model.
+    :param dnn_feature_columns: An iterable containing all the input_layer_features used by deep part of the model.
     :param embedding_size: positive integer,sparse feature embedding_size
     :param bilinear_type: str,bilinear function type used in Bilinear Interaction Layer,can be ``'all'`` , ``'each'`` or ``'interaction'``
     :param reduction_ratio: integer in [1,inf), reduction ratio used in SENET Layer

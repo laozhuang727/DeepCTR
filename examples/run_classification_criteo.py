@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, MinMaxScaler
 
 from deepctr.models import DeepFM
-from deepctr.inputs import  SparseFeat, DenseFeat, get_feature_names
+from deepctr.inputs import  SparseFeat, DenseFeat, get_input_feature_names
 
 if __name__ == "__main__":
     # https: // www.kaggle.com / c / criteo - display - ad - challenge / data
@@ -33,7 +33,7 @@ if __name__ == "__main__":
     dnn_feature_columns = fixlen_feature_columns
     linear_feature_columns = fixlen_feature_columns
 
-    feature_names = get_feature_names(linear_feature_columns + dnn_feature_columns)
+    feature_names = get_input_feature_names(linear_feature_columns + dnn_feature_columns)
 
     # 3.generate input data for model
 

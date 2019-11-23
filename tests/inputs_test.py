@@ -1,5 +1,5 @@
 from deepctr.models import DeepFM
-from deepctr.inputs import DenseFeat, SparseFeat, get_feature_names, create_embedding_matrix, embedding_lookup, \
+from deepctr.inputs import DenseFeat, SparseFeat, get_input_feature_names, create_embedding_matrix, embedding_lookup, \
     build_input_layer_features, build_emd_layer_from_feature_columns
 import numpy as np
 
@@ -7,7 +7,7 @@ feature_columns = [SparseFeat('user_id', 4, ), SparseFeat('item_id', 5, ), Dense
 
 
 def test_create_embedding_matrix():
-    fixlen_feature_names = get_feature_names(feature_columns)
+    fixlen_feature_names = get_input_feature_names(feature_columns)
 
     user_id = np.array([[1], [0], [1]])
     item_id = np.array([[3], [2], [1]])

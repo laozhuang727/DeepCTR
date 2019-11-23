@@ -1,7 +1,7 @@
 import numpy as np
 import tensorflow as tf
 from deepctr.models import DSIN
-from deepctr.inputs import SparseFeat,VarLenSparseFeat,DenseFeat,get_feature_names
+from deepctr.inputs import SparseFeat,VarLenSparseFeat,DenseFeat,get_input_feature_names
 
 
 def get_xy_fd(hash_flag=False):
@@ -33,7 +33,7 @@ def get_xy_fd(hash_flag=False):
                     'sess_0_item': sess1_iid, 'sess_0_item_gender': sess1_igender, 'score': score,
                     'sess_1_item': sess2_iid, 'sess_1_item_gender': sess2_igender, }
 
-    x = {name:feature_dict[name] for name in get_feature_names(feature_columns)}
+    x = {name:feature_dict[name] for name in get_input_feature_names(feature_columns)}
     x["sess_length"] = sess_number
     y = [1, 0, 1]
     return x, y, feature_columns, behavior_feature_list

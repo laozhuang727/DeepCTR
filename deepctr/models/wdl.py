@@ -8,9 +8,10 @@ Reference:
 """
 
 from tensorflow.python.keras.models import Model
-from tensorflow.python.keras.layers import Dense,add
+from tensorflow.python.keras.layers import Dense, add
 
-from ..inputs import build_input_layer_features, get_linear_logit,build_emd_layer_from_feature_columns,combined_dnn_input
+from ..inputs import build_input_layer_features, get_linear_logit, build_emd_layer_from_feature_columns, \
+    combined_dnn_input
 from ..layers.core import PredictionLayer, DNN
 
 
@@ -36,16 +37,16 @@ def WDL(linear_feature_columns, dnn_feature_columns, embedding_size=8, dnn_hidde
 
     input_features = build_input_layer_features(linear_feature_columns + dnn_feature_columns)
 
-    inputs_list = list(input_features.values())
+    inputs_feature_list = list(input_features.values())
 
     sparse_embedding_list, dense_value_list = build_emd_layer_from_feature_columns(input_features, dnn_feature_columns,
                                                                                    embedding_size,
                                                                                    l2_reg_embedding, init_std,
                                                                                    seed)
 
-    linear_logit = get_linear_logit(input_features, linear_feature_columns, init_std=init_std, seed=seed, prefix='linear',
+    linear_logit = get_linear_logit(input_features, linear_feature_columns, init_std=init_std, seed=seed,
+                                    prefix='linear',
                                     l2_reg=l2_reg_linear)
-
 
     dnn_input = combined_dnn_input(sparse_embedding_list, dense_value_list)
     dnn_out = DNN(dnn_hidden_units, dnn_activation, l2_reg_dnn, dnn_dropout,
@@ -54,7 +55,7 @@ def WDL(linear_feature_columns, dnn_feature_columns, embedding_size=8, dnn_hidde
         1, use_bias=False, activation=None)(dnn_out)
 
     if len(linear_feature_columns) > 0 and len(dnn_feature_columns) > 0:  # linear + dnn
-        final_logit = add([linear_logit,dnn_logit])
+        final_logit = add([linear_logit, dnn_logit])
     elif len(linear_feature_columns) == 0:
         final_logit = dnn_logit
     elif len(dnn_feature_columns) == 0:
@@ -64,5 +65,5 @@ def WDL(linear_feature_columns, dnn_feature_columns, embedding_size=8, dnn_hidde
 
     output = PredictionLayer(task)(final_logit)
 
-    model = Model(inputs=inputs_list, outputs=output)
+    model = Model(inputs=inputs_feature_list, outputs=output)
     return model

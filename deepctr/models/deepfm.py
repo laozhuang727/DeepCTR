@@ -10,7 +10,8 @@ Reference:
 
 import tensorflow as tf
 
-from ..inputs import build_emd_layer_from_feature_columns, get_linear_logit,build_input_layer_features,combined_dnn_input
+from ..inputs import build_emd_layer_from_feature_columns, get_linear_logit, build_input_layer_features, \
+    combined_dnn_input
 from ..layers.core import PredictionLayer, DNN
 from ..layers.interaction import FM
 from ..layers.utils import concat_fun
@@ -38,27 +39,28 @@ def DeepFM(linear_feature_columns, dnn_feature_columns, embedding_size=8, use_fm
     :return: A Keras model instance.
     """
 
-    features = build_input_layer_features(linear_feature_columns + dnn_feature_columns)
+    input_layer_features = build_input_layer_features(linear_feature_columns + dnn_feature_columns)
 
-    inputs_list = list(features.values())
+    inputs_list = list(input_layer_features.values())
 
-    sparse_embedding_list, dense_value_list = build_emd_layer_from_feature_columns(features, dnn_feature_columns,
+    sparse_embedding_list, dense_value_list = build_emd_layer_from_feature_columns(input_layer_features,
+                                                                                   dnn_feature_columns,
                                                                                    embedding_size,
                                                                                    l2_reg_embedding, init_std,
                                                                                    seed)
 
-    linear_logit = get_linear_logit(features, linear_feature_columns, init_std=init_std, seed=seed, prefix='linear',
+    linear_logit = get_linear_logit(input_layer_features, linear_feature_columns, init_std=init_std, seed=seed,
+                                    prefix='linear',
                                     l2_reg=l2_reg_linear)
 
     fm_input = concat_fun(sparse_embedding_list, axis=1)
     fm_logit = FM()(fm_input)
 
-    dnn_input = combined_dnn_input(sparse_embedding_list,dense_value_list)
+    dnn_input = combined_dnn_input(sparse_embedding_list, dense_value_list)
     dnn_out = DNN(dnn_hidden_units, dnn_activation, l2_reg_dnn, dnn_dropout,
-                   dnn_use_bn, seed)(dnn_input)
+                  dnn_use_bn, seed)(dnn_input)
     dnn_logit = tf.keras.layers.Dense(
         1, use_bias=False, activation=None)(dnn_out)
-
 
     if len(dnn_hidden_units) == 0 and use_fm == False:  # only linear
         final_logit = linear_logit

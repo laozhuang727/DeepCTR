@@ -32,8 +32,8 @@ def NFFM(linear_feature_columns, dnn_feature_columns, embedding_size=4, dnn_hidd
          ):
     """Instantiates the Operation-aware Neural Networks  architecture.
 
-    :param linear_feature_columns: An iterable containing all the features used by linear part of the model.
-    :param dnn_feature_columns: An iterable containing all the features used by deep part of the model.
+    :param linear_feature_columns: An iterable containing all the input_layer_features used by linear part of the model.
+    :param dnn_feature_columns: An iterable containing all the input_layer_features used by deep part of the model.
     :param embedding_size: positive integer,sparse feature embedding_size
     :param dnn_hidden_units: list,list of positive integer or empty list, the layer number and units in each layer of deep net
     :param l2_reg_embedding: float. L2 regularizer strength applied to embedding vector
