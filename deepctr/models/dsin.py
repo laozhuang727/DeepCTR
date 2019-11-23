@@ -16,7 +16,7 @@ from tensorflow.python.keras.layers import (Concatenate, Dense, Embedding,
 from tensorflow.python.keras.models import Model
 from tensorflow.python.keras.regularizers import l2
 
-from ..inputs import (build_input_features,
+from ..inputs import (build_input_layer_features,
                       get_embedding_vec_list, get_inputs_list, SparseFeat, VarLenSparseFeat, DenseFeat,
                       embedding_lookup, get_dense_input, combined_dnn_input)
 from ..layers.core import DNN, PredictionLayer
@@ -57,7 +57,7 @@ def DSIN(dnn_feature_columns, sess_feature_list, embedding_size=8, sess_max_coun
             "len(session_feature_lsit) * embedding_size must equal to att_embedding_size * att_head_num ,got %d * %d != %d *%d" % (
                 len(sess_feature_list), embedding_size, att_embedding_size, att_head_num))
 
-    features = build_input_features(dnn_feature_columns)
+    features = build_input_layer_features(dnn_feature_columns)
 
     sparse_feature_columns = list(
         filter(lambda x: isinstance(x, SparseFeat), dnn_feature_columns)) if dnn_feature_columns else []

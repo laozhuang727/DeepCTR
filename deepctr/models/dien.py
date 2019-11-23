@@ -11,7 +11,7 @@ Reference:
 import tensorflow as tf
 from tensorflow.python.keras.layers import (Concatenate, Dense, Input, Permute, multiply)
 
-from ..inputs import build_input_features, get_varlen_pooling_list,create_embedding_matrix,embedding_lookup,varlen_embedding_lookup,SparseFeat,DenseFeat,VarLenSparseFeat,get_dense_input,combined_dnn_input
+from ..inputs import build_input_layer_features, get_varlen_pooling_list,create_embedding_matrix,embedding_lookup,varlen_embedding_lookup,SparseFeat,DenseFeat,VarLenSparseFeat,get_dense_input,combined_dnn_input
 from ..layers.core import DNN, PredictionLayer
 from ..layers.sequence import AttentionSequencePoolingLayer, DynamicGRU
 from ..layers.utils import concat_fun,reduce_mean
@@ -192,7 +192,7 @@ def DIEN(dnn_feature_columns, history_feature_list, embedding_size=8, hist_len_m
     # keys_emb = concat_fun(keys_emb_list)
     # deep_input_emb = concat_fun(deep_input_emb_list)
 
-    features = build_input_features(dnn_feature_columns)
+    features = build_input_layer_features(dnn_feature_columns)
 
     user_behavior_length = Input(shape=(1,), name='seq_length')
 

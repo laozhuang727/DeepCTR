@@ -73,32 +73,32 @@ class VarLenSparseFeat(namedtuple('VarLenFeat', ['name', 'dimension', 'maxlen', 
         return 'VarLenSparseFeat:'+self.name
 
 def get_feature_names(feature_columns):
-    features = build_input_features(feature_columns)
+    features = build_input_layer_features(feature_columns)
     return list(features.keys())
 
 def get_inputs_list(inputs):
     return list(chain(*list(map(lambda x: x.values(), filter(lambda x: x is not None, inputs)))))
 
-def build_input_features(feature_columns, mask_zero=True, prefix=''):
-    input_features = OrderedDict()
+def build_input_layer_features(feature_columns, mask_zero=True, prefix=''):
+    input_layer_features = OrderedDict()
     for fc in feature_columns:
         if isinstance(fc,SparseFeat):
-            input_features[fc.name] = Input(
+            input_layer_features[fc.name] = Input(
                 shape=(1,), name=prefix+fc.name, dtype=fc.dtype)
         elif isinstance(fc,DenseFeat):
-            input_features[fc.name] = Input(
+            input_layer_features[fc.name] = Input(
                 shape=(fc.dimension,), name=prefix + fc.name, dtype=fc.dtype)
         elif isinstance(fc,VarLenSparseFeat):
-            input_features[fc.name] = Input(shape=(fc.maxlen,), name=prefix + fc.name,
+            input_layer_features[fc.name] = Input(shape=(fc.maxlen,), name=prefix + fc.name,
                                             dtype=fc.dtype)
             if not mask_zero:
-                input_features[fc.name + "_seq_length"] = Input(shape=(
+                input_layer_features[fc.name + "_seq_length"] = Input(shape=(
                     1,), name=prefix + 'seq_length_' + fc.name)
-                input_features[fc.name + "_seq_max_length"] = fc.maxlen
+                input_layer_features[fc.name + "_seq_max_length"] = fc.maxlen
         else:
             raise TypeError("Invalid feature column type,got",type(fc))
 
-    return input_features
+    return input_layer_features
 
 
 def create_embedding_dict(sparse_feature_columns, varlen_sparse_feature_columns, embedding_size, init_std, seed, l2_reg,
@@ -174,8 +174,8 @@ def create_embedding_matrix(feature_columns,l2_reg,init_std,seed,embedding_size,
 def get_linear_logit(features, feature_columns, units=1, use_bias=False, init_std=0.0001, seed=1024, prefix='linear',
                      l2_reg=0):
 
-    linear_emb_list = [input_from_feature_columns(features,feature_columns,1,l2_reg,init_std,seed,prefix=prefix+str(i))[0] for i in range(units)]
-    _, dense_input_list = input_from_feature_columns(features,feature_columns,1,l2_reg,init_std,seed,prefix=prefix)
+    linear_emb_list = [build_emd_layer_from_feature_columns(features, feature_columns, 1, l2_reg, init_std, seed, prefix=prefix + str(i))[0] for i in range(units)]
+    _, dense_input_list = build_emd_layer_from_feature_columns(features, feature_columns, 1, l2_reg, init_std, seed, prefix=prefix)
 
     linear_logit_list = []
     for i in range(units):
@@ -271,7 +271,7 @@ def get_dense_input(features,feature_columns):
     return dense_input_list
 
 
-def input_from_feature_columns(features,feature_columns, embedding_size, l2_reg, init_std, seed,prefix='',seq_mask_zero=True,support_dense=True):
+def build_emd_layer_from_feature_columns(features, feature_columns, embedding_size, l2_reg, init_std, seed, prefix='', seq_mask_zero=True, support_dense=True):
 
 
     sparse_feature_columns = list(filter(lambda x:isinstance(x,SparseFeat),feature_columns)) if feature_columns else []

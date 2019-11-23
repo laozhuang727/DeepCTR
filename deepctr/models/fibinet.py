@@ -10,7 +10,7 @@ Reference:
 from tensorflow.python.keras.models import Model
 from tensorflow.python.keras.layers import Dense, add, Flatten
 
-from ..inputs import build_input_features, get_linear_logit, input_from_feature_columns, combined_dnn_input
+from ..inputs import build_input_layer_features, get_linear_logit, build_emd_layer_from_feature_columns, combined_dnn_input
 from ..layers.core import PredictionLayer, DNN
 from ..layers.interaction import SENETLayer, BilinearInteraction
 from ..layers.utils import concat_fun
@@ -38,14 +38,14 @@ def FiBiNET(linear_feature_columns, dnn_feature_columns, embedding_size=8, bilin
     :return: A Keras model instance.
     """
 
-    features = build_input_features(linear_feature_columns + dnn_feature_columns)
+    features = build_input_layer_features(linear_feature_columns + dnn_feature_columns)
 
     inputs_list = list(features.values())
 
-    sparse_embedding_list, dense_value_list = input_from_feature_columns(features, dnn_feature_columns,
-                                                                         embedding_size,
-                                                                         l2_reg_embedding, init_std,
-                                                                         seed)
+    sparse_embedding_list, dense_value_list = build_emd_layer_from_feature_columns(features, dnn_feature_columns,
+                                                                                   embedding_size,
+                                                                                   l2_reg_embedding, init_std,
+                                                                                   seed)
 
     senet_embedding_list = SENETLayer(
         reduction_ratio, seed)(sparse_embedding_list)

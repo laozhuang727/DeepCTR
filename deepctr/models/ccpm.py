@@ -11,7 +11,7 @@ Reference:
 """
 import tensorflow as tf
 
-from ..inputs import input_from_feature_columns, get_linear_logit,build_input_features
+from ..inputs import build_emd_layer_from_feature_columns, get_linear_logit,build_input_layer_features
 from ..layers.core import DNN, PredictionLayer
 from ..layers.sequence import KMaxPooling
 from ..layers.utils import concat_fun
@@ -42,12 +42,12 @@ def CCPM(linear_feature_columns, dnn_feature_columns, embedding_size=8, conv_ker
         raise ValueError(
             "conv_kernel_width must have same element with conv_filters")
 
-    features = build_input_features(linear_feature_columns + dnn_feature_columns)
+    features = build_input_layer_features(linear_feature_columns + dnn_feature_columns)
     inputs_list = list(features.values())
 
-    sparse_embedding_list, _ = input_from_feature_columns(features,dnn_feature_columns,embedding_size,
-                                                                                               l2_reg_embedding, init_std,
-                                                                                               seed,support_dense=False)
+    sparse_embedding_list, _ = build_emd_layer_from_feature_columns(features, dnn_feature_columns, embedding_size,
+                                                                    l2_reg_embedding, init_std,
+                                                                    seed, support_dense=False)
     linear_logit = get_linear_logit(features, linear_feature_columns, init_std=init_std, seed=seed,
                                     l2_reg=l2_reg_linear)
 

@@ -8,7 +8,7 @@ Reference:
 """
 import tensorflow as tf
 
-from ..inputs import input_from_feature_columns, get_linear_logit,build_input_features,combined_dnn_input
+from ..inputs import build_emd_layer_from_feature_columns, get_linear_logit,build_input_layer_features,combined_dnn_input
 from ..layers.core import PredictionLayer, DNN
 from ..layers.interaction import CIN
 from ..layers.utils import concat_fun
@@ -41,14 +41,14 @@ def xDeepFM(linear_feature_columns, dnn_feature_columns, embedding_size=8, dnn_h
     """
 
 
-    features = build_input_features(linear_feature_columns + dnn_feature_columns)
+    features = build_input_layer_features(linear_feature_columns + dnn_feature_columns)
 
     inputs_list = list(features.values())
 
-    sparse_embedding_list, dense_value_list = input_from_feature_columns(features,dnn_feature_columns,
-                                                                              embedding_size,
-                                                                              l2_reg_embedding,init_std,
-                                                                              seed)
+    sparse_embedding_list, dense_value_list = build_emd_layer_from_feature_columns(features, dnn_feature_columns,
+                                                                                   embedding_size,
+                                                                                   l2_reg_embedding, init_std,
+                                                                                   seed)
 
     linear_logit = get_linear_logit(features, linear_feature_columns, init_std=init_std, seed=seed, prefix='linear',
                                     l2_reg=l2_reg_linear)

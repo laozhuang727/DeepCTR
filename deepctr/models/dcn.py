@@ -8,7 +8,7 @@ Reference:
 """
 import tensorflow as tf
 
-from ..inputs import input_from_feature_columns,build_input_features,combined_dnn_input
+from ..inputs import build_emd_layer_from_feature_columns,build_input_layer_features,combined_dnn_input
 from ..layers.core import PredictionLayer, DNN
 from ..layers.interaction import CrossNet
 
@@ -37,13 +37,13 @@ def DCN(dnn_feature_columns, embedding_size='auto', cross_num=2, dnn_hidden_unit
     if len(dnn_hidden_units) == 0 and cross_num == 0:
         raise ValueError("Either hidden_layer or cross layer must > 0")
 
-    features = build_input_features(dnn_feature_columns)
+    features = build_input_layer_features(dnn_feature_columns)
     inputs_list = list(features.values())
 
-    sparse_embedding_list, dense_value_list = input_from_feature_columns(features,dnn_feature_columns,
-                                                                                               embedding_size,
-                                                                                               l2_reg_embedding, init_std,
-                                                                                               seed)
+    sparse_embedding_list, dense_value_list = build_emd_layer_from_feature_columns(features, dnn_feature_columns,
+                                                                                   embedding_size,
+                                                                                   l2_reg_embedding, init_std,
+                                                                                   seed)
     dnn_input = combined_dnn_input(sparse_embedding_list,dense_value_list)
 
     if len(dnn_hidden_units) > 0 and cross_num > 0:  # Deep & Cross

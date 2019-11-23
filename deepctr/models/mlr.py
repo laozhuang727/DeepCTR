@@ -10,7 +10,7 @@ from tensorflow.python.keras.layers import  Activation, dot
 from tensorflow.python.keras.models import Model
 
 from ..layers.core import PredictionLayer
-from ..inputs import build_input_features,get_linear_logit
+from ..inputs import build_input_layer_features,get_linear_logit
 from ..layers.utils import concat_fun
 
 def MLR(region_feature_columns, base_feature_columns=None, region_num=4,
@@ -40,7 +40,7 @@ def MLR(region_feature_columns, base_feature_columns=None, region_num=4,
     if bias_feature_columns is None:
         bias_feature_columns = []
 
-    features = build_input_features(region_feature_columns + base_feature_columns + bias_feature_columns)
+    features = build_input_layer_features(region_feature_columns + base_feature_columns + bias_feature_columns)
 
     inputs_list = list(features.values())
 

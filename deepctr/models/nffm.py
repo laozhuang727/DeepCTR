@@ -19,7 +19,7 @@ from tensorflow.python.keras.layers import (Dense, Embedding, Lambda, add,
 from tensorflow.python.keras.models import Model
 from tensorflow.python.keras.regularizers import l2
 
-from ..inputs import (build_input_features, VarLenSparseFeat,
+from ..inputs import (build_input_layer_features, VarLenSparseFeat,
                       get_linear_logit, SparseFeat, get_dense_input, combined_dnn_input)
 from ..layers.core import DNN, PredictionLayer
 from ..layers.sequence import SequencePoolingLayer
@@ -49,7 +49,7 @@ def NFFM(linear_feature_columns, dnn_feature_columns, embedding_size=4, dnn_hidd
     """
 
 
-    features = build_input_features(linear_feature_columns + dnn_feature_columns)
+    features = build_input_layer_features(linear_feature_columns + dnn_feature_columns)
 
     inputs_list = list(features.values())
 

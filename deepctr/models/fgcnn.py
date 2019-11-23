@@ -11,7 +11,7 @@ Reference:
 """
 import tensorflow as tf
 
-from ..inputs import build_input_features, input_from_feature_columns
+from ..inputs import build_input_layer_features, build_emd_layer_from_feature_columns
 from ..layers.core import PredictionLayer, DNN
 from ..layers.interaction import InnerProductLayer, FGCNNLayer
 from ..layers.utils import concat_fun
@@ -49,18 +49,18 @@ def FGCNN(dnn_feature_columns, embedding_size=8, conv_kernel_width=(7, 7, 7, 7),
         raise ValueError(
             "conv_kernel_width,conv_filters,new_maps  and pooling_width must have same length")
 
-    features = build_input_features(dnn_feature_columns)
+    features = build_input_layer_features(dnn_feature_columns)
 
     inputs_list = list(features.values())
 
-    deep_emb_list, _ = input_from_feature_columns(features,dnn_feature_columns,
-                                                                              embedding_size,
-                                                                              l2_reg_embedding,init_std,
-                                                                              seed)
-    fg_deep_emb_list,_ = input_from_feature_columns(features,dnn_feature_columns,
-                                                                              embedding_size,
-                                                                              l2_reg_embedding,init_std,
-                                                                              seed,prefix='fg')
+    deep_emb_list, _ = build_emd_layer_from_feature_columns(features, dnn_feature_columns,
+                                                            embedding_size,
+                                                            l2_reg_embedding, init_std,
+                                                            seed)
+    fg_deep_emb_list,_ = build_emd_layer_from_feature_columns(features, dnn_feature_columns,
+                                                              embedding_size,
+                                                              l2_reg_embedding, init_std,
+                                                              seed, prefix='fg')
 
 
     fg_input = concat_fun(fg_deep_emb_list, axis=1)

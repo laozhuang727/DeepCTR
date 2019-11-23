@@ -35,8 +35,7 @@ class Hash(tf.keras.layers.Layer):
         super(Hash, self).__init__(**kwargs)
 
     def build(self, input_shape):
-        # Be sure to call this somewhere!
-        super(Hash, self).build(input_shape)
+         super(Hash, self).build(input_shape)
 
     def call(self, x, mask=None, **kwargs):
         if x.dtype != tf.string:

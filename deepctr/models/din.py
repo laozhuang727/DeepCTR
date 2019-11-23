@@ -11,7 +11,7 @@ Reference:
 from tensorflow.python.keras.layers import Dense,Concatenate, Flatten
 from tensorflow.python.keras.models import Model
 
-from ..inputs import  build_input_features,create_embedding_matrix,SparseFeat,VarLenSparseFeat,DenseFeat,embedding_lookup,get_dense_input,varlen_embedding_lookup,get_varlen_pooling_list,combined_dnn_input
+from ..inputs import  build_input_layer_features,create_embedding_matrix,SparseFeat,VarLenSparseFeat,DenseFeat,embedding_lookup,get_dense_input,varlen_embedding_lookup,get_varlen_pooling_list,combined_dnn_input
 from ..layers.core import DNN, PredictionLayer
 from ..layers.sequence import AttentionSequencePoolingLayer
 from ..layers.utils import concat_fun, NoMask
@@ -44,7 +44,7 @@ def DIN(dnn_feature_columns, history_feature_list, embedding_size=8, hist_len_ma
     """
 
 
-    features = build_input_features(dnn_feature_columns)
+    features = build_input_layer_features(dnn_feature_columns)
 
     sparse_feature_columns = list(filter(lambda x:isinstance(x,SparseFeat),dnn_feature_columns)) if dnn_feature_columns else []
     dense_feature_columns = list(

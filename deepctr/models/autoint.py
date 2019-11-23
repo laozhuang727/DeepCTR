@@ -11,7 +11,7 @@ Reference:
 
 import tensorflow as tf
 
-from ..inputs import input_from_feature_columns,build_input_features,combined_dnn_input
+from ..inputs import build_emd_layer_from_feature_columns,build_input_layer_features,combined_dnn_input
 from ..layers.core import PredictionLayer, DNN
 from ..layers.interaction import InteractingLayer
 from ..layers.utils import concat_fun
@@ -44,13 +44,13 @@ def AutoInt(dnn_feature_columns, embedding_size=8, att_layer_num=3, att_embeddin
     if len(dnn_hidden_units) <= 0 and att_layer_num <= 0:
         raise ValueError("Either hidden_layer or att_layer_num must > 0")
 
-    features = build_input_features(dnn_feature_columns)
+    features = build_input_layer_features(dnn_feature_columns)
     inputs_list = list(features.values())
 
-    sparse_embedding_list, dense_value_list = input_from_feature_columns(features,dnn_feature_columns,embedding_size,
-                                                                                               l2_reg_embedding,
-                                                                                                init_std,
-                                                                                               seed)
+    sparse_embedding_list, dense_value_list = build_emd_layer_from_feature_columns(features, dnn_feature_columns, embedding_size,
+                                                                                   l2_reg_embedding,
+                                                                                   init_std,
+                                                                                   seed)
 
 
     att_input = concat_fun(sparse_embedding_list, axis=1)
