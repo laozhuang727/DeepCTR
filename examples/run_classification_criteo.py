@@ -1,13 +1,21 @@
+# coding=utf-8
 import pandas as pd
 from sklearn.metrics import log_loss, roc_auc_score
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, MinMaxScaler
+from tensorflow.python import keras
 
 from deepctr.models import DeepFM
 from deepctr.inputs import  SparseFeat, DenseFeat, get_input_feature_names
 
+import matplotlib.pyplot as plt
+
+import os
+os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
+
 if __name__ == "__main__":
-    # https: // www.kaggle.com / c / criteo - display - ad - challenge / data
+    # https://www.kaggle.com/c/criteo-display-ad-challenge/data
+    # data = pd.read_csv('./criteo_sample.txt')
     data = pd.read_csv('./criteo_sample.txt')
 
     sparse_features = ['C' + str(i) for i in range(1, 27)]
@@ -45,9 +53,24 @@ if __name__ == "__main__":
     model = DeepFM(linear_feature_columns, dnn_feature_columns, task='binary')
     model.compile("adam", "binary_crossentropy",
                   metrics=['binary_crossentropy'], )
+    callbacks = [keras.callbacks.EarlyStopping(
+        patience=5, min_delta=1e-4)]
 
     history = model.fit(train_model_input, train[target].values,
-                        batch_size=256, epochs=300, verbose=2, validation_split=0.2, )
+                        batch_size=256, epochs=1000, verbose=2, validation_split=0.2,
+                        callbacks= callbacks)
     pred_ans = model.predict(test_model_input, batch_size=256)
     print("test LogLoss", round(log_loss(test[target].values, pred_ans), 4))
     print("test AUC", round(roc_auc_score(test[target].values, pred_ans), 4))
+
+
+    # 5. 画曲线
+    def plot_learning_curves(history):
+        pd.DataFrame(history.history).plot(figsize=(8, 5))
+        plt.grid(True)
+        plt.gca().set_ylim(0, 1)
+        plt.show()
+
+
+    #
+    plot_learning_curves(history)
