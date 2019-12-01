@@ -132,8 +132,8 @@ callbacks = [keras.callbacks.EarlyStopping(
     patience=5, min_delta=1e-4)]
 
 """第三步：调用fit()函数训练模型"""
-history = model.fit(train_model_input, train[target].values, batch_size=BATCH_SIZE, epochs=10,
-                    validation_split=0.2, verbose=1)
+history = model.fit(train_model_input, train[target].values, batch_size=BATCH_SIZE, epochs=2,
+                    validation_split=0.2, verbose=1,callbacks =callbacks)
 
 """预测"""
 val_pred_ans = model.predict(valid_model_input, BATCH_SIZE)
