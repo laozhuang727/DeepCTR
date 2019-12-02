@@ -15,6 +15,7 @@ from sklearn.metrics import f1_score, roc_auc_score
 from sklearn.model_selection import StratifiedKFold
 from sklearn.preprocessing import LabelEncoder
 from tqdm import tqdm
+import matplotlib.pyplot as plt
 
 warnings.filterwarnings('ignore')
 
@@ -107,7 +108,7 @@ for model_seed in range(num_model_seed):
         lgb_model = lgb.train(lgb_param, lgb_train, num_boost_round=40000, valid_sets=[lgb_valid],
                               valid_names=['valid'], early_stopping_rounds=50, feval=eval_func,
                               # categorical_feature=cate_feat
-                              verbose_eval=10)
+                              verbose_eval=3)
 
         oof_lgb[test_index] += lgb_model.predict(test_x)
         prediction_lgb += lgb_model.predict(X_test[feature_name]) / 5
@@ -126,3 +127,8 @@ submit['target'] = prediction
 submit['target'] = submit['target'].rank()
 submit['target'] = (submit['target'] >= submit.shape[0] * 0.8934642948637943).astype(int)
 submit.to_csv("lgb.csv", index=False)
+
+plt.figure(figsize=(12,6))
+lgb.plot_importance(lgb_model, max_num_features=30)
+plt.title("Featurertances")
+plt.show()
